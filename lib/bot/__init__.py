@@ -53,17 +53,16 @@ class Bot(BotBase):
             
             #embed rész
             before = time.monotonic()
-            embed = Embed(title=f"LudBot Ver.: {self.VERSION}", description=f"*{random.choice(RANDOMQUOTES)}*", url="https://github.com/Netesfiu/LudBot")
+            embed = Embed(title=f"LudBot Ver.: {self.VERSION}", description=f"*{random.choice(RANDOMQUOTES)}*", url="https://github.com/Netesfiu/LudBot", colour=6784696)
             
-            image_url= "https://cdn.discordapp.com/attachments/728549208688296026/736656736383008868/DISCORD_BOT.png"
+            embed.set_thumbnail(url=self.user.avatar_url)
 
-            embed.set_thumbnail(url=image_url)
-            embed.set_image
             fields = [("ping(API):",f"{round(self.latency*1000)} ms", True),
                       ("ping(Self):",f"{(time.monotonic()-before)*1000} ms",True)]
-        
+
             for name, value, inline in fields:
                 embed.add_field(name=name, value=value, inline=inline)
+            embed.set_author(name=self.guild.name, icon_url=self.guild.icon_url)
             await channel.send(embed=embed)
         
         else:
