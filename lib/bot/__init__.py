@@ -12,14 +12,6 @@ from ..db import db
 
 PREFIX = "//"
 OWNER_IDS = [173849172833730560]
-RANDOMQUOTES = [
-    "Dont judge.. Ezt egy környezetmérnök írta",
-    "És emiatt aludtam átlag napi 3 órát",
-    "Milyen napot írunk?",
-    "Amugy semmi közöm a programozáshoz",
-    "Mi az a Szabadidő?",
-    "Mérnöknek lenni jó"
-]
 COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 
 class Ready(object):
@@ -76,7 +68,7 @@ class Bot(BotBase):
 
         channel = self.get_channel(7395579881210513489)
         await channel.send("Hiba történt")
-        raise
+        raise err
 
     async def on_command_error(self, ctx, exc):
         if isinstance(exc, CommandNotFound):
@@ -98,21 +90,6 @@ class Bot(BotBase):
 
             await self.stdout.send(f"LudBot by {self.owner}")
 
-            # embed rész
-            # before = time.monotonic()
-            # embed = Embed(title=f"LudBot Ver.: {self.VERSION}", description=f"*{random.choice(RANDOMQUOTES)}*",
-            #               url="https://github.com/Netesfiu/LudBot", colour=6784696)
-
-            # embed.set_thumbnail(url=self.user.avatar_url)
-
-            # fields = [("ping(API):", f"{round(self.latency*1000)} ms", True),
-            #              ("ping(Self):", f"{(time.monotonic()-before)*1000} ms", True)]
-
-            # for name, value, inline in fields:
-            #     embed.add_field(name=name, value=value, inline=inline)
-            # embed.set_author(name=self.guild.name,
-            # icon_url=self.guild.icon_url)
-            # await channel.send(embed=embed)
 
             while not self.cogs_ready.all_ready():
                 await sleep(0.5)
