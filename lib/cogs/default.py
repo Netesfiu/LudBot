@@ -15,9 +15,9 @@ class default(Cog):
         await ctx.trigger_typing()
 
         ping = round(self.bot.latency*1000, 1)
-        
+
         await ctx.send(f"**Pong!** \n{ping} ms")
-    
+
     @command(name="info", aliases=["about"])
     async def embed_info(self, ctx):
         ping = round(self.bot.latency*1000, 1)

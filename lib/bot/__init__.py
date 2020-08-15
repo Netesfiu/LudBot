@@ -5,7 +5,7 @@ from glob import glob
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from discord import Embed, File
-from discord.ext.commands import Bot as BotBase
+from discord.ext.commands import Bot as BotBase, Context
 from discord.ext.commands import CommandNotFound
 
 from ..db import db
@@ -14,17 +14,19 @@ PREFIX = "//"
 OWNER_IDS = [173849172833730560]
 COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 
+
 class Ready(object):
-	def __init__(self):
-		for cog in COGS:
-			setattr(self, cog, False)
+    def __init__(self):
+        for cog in COGS:
+            setattr(self, cog, False)
 
-	def ready_up(self, cog):
-		setattr(self, cog, True)
-		print(f" '{cog}' modul betöltve!")
+    def ready_up(self, cog):
+        setattr(self, cog, True)
+        print(f" '{cog}' modul betöltve!")
 
-	def all_ready(self):
-		return all([getattr(self, cog) for cog in COGS])
+    def all_ready(self):
+        return all([getattr(self, cog) for cog in COGS])
+
 
 class Bot(BotBase):
     def __init__(self):
@@ -47,14 +49,23 @@ class Bot(BotBase):
     def run(self, version):
         self.VERSION = version
 
-        print ("Inicializálás...")
+        print("Inicializálás...")
         self.setup()
 
         with open("./lib/bot/token.0", "r", encoding="utf-8") as tf:
             self.TOKEN = tf.read()
 
-        print ("Bot indítása...")
+        print("Bot indítása...")
         super().run(self.TOKEN, reconnect=True)
+
+    async def process_commands(self, message):
+        ctx = await self.get_context(message, cls=Context)
+
+        if ctx.command is not None and ctx.guild is not None:
+            if self.ready:
+                await self.invoke(ctx)
+            else:
+                await ctx.send("Nemtudok fogadni több parancsot! Kérlek várj pár másodpercet")
 
     async def on_connect(self):
         print("Bot csatlakoztatva!")
@@ -89,7 +100,6 @@ class Bot(BotBase):
             print(f"LudBot by {self.owner} \nVer.: {self.VERSION}")
 
             await self.stdout.send(f"LudBot by {self.owner}")
-
 
             while not self.cogs_ready.all_ready():
                 await sleep(0.5)
