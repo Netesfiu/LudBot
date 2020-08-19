@@ -9,48 +9,50 @@ from random import choice
 
 
 class API(Cog):
-    def __init__(self, bot):
-        self.bot = bot
+	def __init__(self, bot):
+		self.bot = bot
 
-    @command(name="fact")
-    @cooldown(3, 60, BucketType.guild)
-    async def animal_fact(self, ctx, animal: str):
-        if (animal := animal.lower()) in ("dog", "cat", "panda", "fox", "bird", "koala"):
-            fact_url = f"https://some-random-api.ml/facts/{animal}"
-            image_url = f"https://some-random-api.ml/img/{'birb' if animal == 'bird' else animal}"
+	@command(name="fact")
+	@cooldown(3, 60, BucketType.guild)
+	async def animal_fact(self, ctx, animal: str):
+		if (animal := animal.lower()) in ("dog", "cat", "panda", "fox", "bird", "koala"):
+			fact_url = f"https://some-random-api.ml/facts/{animal}"
+			image_url = f"https://some-random-api.ml/img/{'birb' if animal == 'bird' else animal}"
 
-            async with request("GET", image_url, headers={}) as response:
-                if response.status == 200:
-                    data = await response.json()
-                    image_link = data["link"]
+			async with request("GET", image_url, headers={}) as response:
+				if response.status == 200:
+					data = await response.json()
+					image_link = data["link"]
 
-                else:
-                    image_link = None
+				else:
+					image_link = None
 
-            async with request("GET", fact_url, headers={}) as response:
-                if response.status == 200:
-                    data = await response.json()
+			async with request("GET", fact_url, headers={}) as response:
+				if response.status == 200:
+					data = await response.json()
 
-                    embed = Embed(title=f"{animal.title()} fact",
-                                  description=data["fact"],
-                                  colour=ctx.author.colour)
-                    if image_link is not None:
-                        embed.set_image(url=image_link)
-                    await ctx.send(embed=embed)
+					embed = Embed(title=f"{animal.title()} fact",
+								  description=data["fact"],
+								  colour=ctx.author.colour)
+					if image_link is not None:
+						embed.set_image(url=image_link)
+					await ctx.send(embed=embed)
 
-                else:
-                    await ctx.send(f"API returned a {response.status} status.")
+				else:
+					await ctx.send(f"API returned a {response.status} status.")
 
-        else:
-            await ctx.send("No facts are available for that animal.")
-            
+		else:
+			await ctx.send("No facts are available for that animal.")
+			
 	@command(name=waifu, aliases=["w2x", "waifu2x"])
+	async def waifu_2x(self, ctx, image):
+			
 
-    @ Cog.listener()
-    async def on_ready(self):
-        if not self.bot.ready:
-            self.bot.cogs_ready.ready_up("API")
+	@ Cog.listener()
+	async def on_ready(self):
+		if not self.bot.ready:
+			self.bot.cogs_ready.ready_up("API")
 
 
 def setup(bot):
-    bot.add_cog(API(bot))
+	bot.add_cog(API(bot))
