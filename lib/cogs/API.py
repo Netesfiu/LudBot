@@ -2,10 +2,12 @@ from discord.ext.commands import Cog, BucketType
 from discord.ext.commands import command
 from discord.ext.commands import BadArgument
 from aiohttp import request
+import discord
 from discord import Member, Embed
 from discord.ext.commands import command, cooldown
-
+import urllib.request
 from random import choice
+from typing import Optional, Union
 
 
 class API(Cog):
@@ -43,10 +45,33 @@ class API(Cog):
 
 		else:
 			await ctx.send("No facts are available for that animal.")
-			
-	@command(name=waifu, aliases=["w2x", "waifu2x"])
-	async def waifu_2x(self, ctx, image):
-			
+
+	@command(name='upscale', aliases=["2x", "ups"])
+	@cooldown(3, 60, BucketType.guild)
+	async def Superresolution(self, ctx, *, image: Optional[Union[Member, str]]):
+
+		await ctx.trigger_typing()
+		if image is None:
+			if hasattr(ctx, 'attachments'):
+				image_url = ctx.attachments[0].url
+			else:
+				image_url = ctx.author.avatar_url
+		elif hasattr(image, 'avatar_url'):
+			image_url = image.avatar_url
+		elif '.png' or '.jpg' or '.webp' in image:
+			image_url = image
+		else:
+			await ctx.send('Ez nem kép!') #if its not a picture
+
+		async with request('POST', 'https://api.deepai.org/api/torch-srgan',
+						   data={'image': f'{image_url}', },
+						   headers={'api-key': 'b85db86a-5856-43ca-8440-c7e76d3e0e87'}) as response:
+			if response.status == 200:
+				data = await response.json()
+				image_link = data['output_url']
+			else:
+				image_link = ("Hiba!") #if Api is not status=200 some kind of error
+			await ctx.send(image_link)
 
 	@ Cog.listener()
 	async def on_ready(self):
