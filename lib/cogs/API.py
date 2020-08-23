@@ -70,7 +70,7 @@ class API(Cog):
 				data = await response.json()
 				image_link = data['output_url']
 			else:
-				image_link = ("Hiba!") #if Api is not status=200 some kind of error
+				image_link = ("Hiba!") #if Api is not status=200
 			await ctx.send(image_link)
 
 	@ Cog.listener()

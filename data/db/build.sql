@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS guilds (
-	ServerID integer PRIMARY KEY,
-	ServerName text DEFAULT NONE,
+	GuildID integer PRIMARY KEY,
+	GuildName text DEFAULT NONE,
 	Prefix text DEFAULT "//"
 );
 
@@ -10,9 +10,8 @@ CREATE TABLE IF NOT EXISTS mutes (
 	EndTime text
 );
 
-CREATE TABLE IF NOT EXISTS hallgato (
+CREATE TABLE IF NOT EXISTS HALLGATO (
 	UserID integer PRIMARY KEY,
-    NEPTUN text DEFAULT "Nem Regisztrált",
-	Kollegium integer DEFAULT 0,
-	Kozossegi integer DEFAULT 1
+	Kozossegi integer DEFAULT 0,
+	HashID text DEFAULT "0"
 );
