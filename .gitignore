@@ -3,3 +3,5 @@
 __pycache__
 lib/bot/token.0
 *.pyc
+*.db
+*.db
