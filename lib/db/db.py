@@ -67,6 +67,10 @@ def column(command, *values):
 
 def execute(command, *values):
     cur.execute(command, tuple(values))
+    
+def register(*values):
+    cur.execute("UPDATE HALLGATO SET HashID=? WHERE UserID=?", tuple(values))
+    cxn.commit()
 
 
 def multiexec(command, valueset):

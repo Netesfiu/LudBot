@@ -13,5 +13,6 @@ CREATE TABLE IF NOT EXISTS mutes (
 CREATE TABLE IF NOT EXISTS HALLGATO (
 	UserID integer PRIMARY KEY,
 	Kozossegi integer DEFAULT 0,
-	HashID text DEFAULT "0"
+	HashID text DEFAULT NONE,
+	Roles text DEFAULT NONE
 );
